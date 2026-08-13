@@ -53,7 +53,10 @@ ROOT_URLCONF = 'Core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR.parent / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,11 +115,18 @@ USE_TZ = True
 # Static Files & Vercel Build Config
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# توجيه البحث لمجلد static سواء كان داخل Core أو في المجلد الرئيسي الخارجي
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+    BASE_DIR.parent / 'static',
+]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
 
-# استخدام WhiteNoise المباشر للـ CSS/JS
+# استخدام WhiteNoise لخدمة الملفات الثابتة
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
 # ------------------------------------------------------------------
 # Media Files & Cloudinary Configurations
 # ------------------------------------------------------------------
