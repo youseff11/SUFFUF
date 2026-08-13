@@ -5,11 +5,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#111a21">
-    <title>{% block title %}SUFFUF{% endblock %} | Industrial Engineering</title>
+
+    {# ============================================================ #}
+    {# SEO + Social Preview (Open Graph / Twitter Card)              #}
+    {# ============================================================ #}
+    {% block page_meta %}
+        {% with default_title="SUFFUF | Industrial Engineering & Construction — Cairo, Egypt" default_desc="SUFFUF delivers precise engineering, fabrication, and construction across mechanical, piping, HTHW, and instrumentation. Design to delivery. Cairo, Egypt." %}
+        <title>{% block title %}SUFFUF{% endblock %} | Industrial Engineering</title>
+        <meta name="description" content="{% block meta_description %}{{ default_desc }}{% endblock %}">
+        <meta name="keywords" content="industrial engineering, mechanical installation, pipe fabrication, storage tanks, HTHW, steam systems, instrumentation, Cairo, Egypt, SUFFUF">
+        <meta name="author" content="SUFFUF Contracting and Construction S.A.E.">
+        <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+
+        {# Open Graph — Facebook, WhatsApp, LinkedIn #}
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="SUFFUF">
+        <meta property="og:locale" content="en_US">
+        <meta property="og:locale:alternate" content="ar_EG">
+        <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+        <meta property="og:title" content="{% block og_title %}{{ default_title }}{% endblock %}">
+        <meta property="og:description" content="{% block og_description %}{{ default_desc }}{% endblock %}">
+        <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/suffuf-hero-industrial.png' %}{% endblock %}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta property="og:image:alt" content="SUFFUF — Industrial engineering facility">
+
+        {# Twitter Card #}
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{% block twitter_title %}{{ default_title }}{% endblock %}">
+        <meta name="twitter:description" content="{% block twitter_description %}{{ default_desc }}{% endblock %}">
+        <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/suffuf-hero-industrial.png' %}{% endblock %}">
+        {% endwith %}
+    {% endblock %}
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{% static 'images/suffuf-mark.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/suffuf-mark.png' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
     <style>
         /* Bilingual content blocks (long text with HTML) */
