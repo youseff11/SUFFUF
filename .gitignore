@@ -7,3 +7,5 @@ media/*
 
 # استثناء مجلد الصور لكي يتم رفعه
 !media/images/
+data.json
+upload_images.py
