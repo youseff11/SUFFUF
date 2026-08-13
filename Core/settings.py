@@ -116,15 +116,14 @@ USE_TZ = True
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 
-# البحث في المجلد الحالي والمجلد الأعلى لضمان العثور على static في جميع الحالات
+# توجيه المجلد المباشر الموجود داخل Core
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
-    BASE_DIR.parent / 'static',
 ]
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# WhiteNoise لخدمة الملفات المجمعة على Vercel
+# WhiteNoise لخدمة الملفات الثابتة
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ------------------------------------------------------------------
