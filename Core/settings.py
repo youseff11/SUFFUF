@@ -8,11 +8,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Environment Variables & Core Settings
 # ------------------------------------------------------------------
 SECRET_KEY = os.environ.get(
-    'SECRET_KEY', 
+    'SECRET_KEY',
     'django-insecure-3+489a64r_=pl0)76m=4af)5z8htn6$x!ax4-v$q=ov4p8(&+='
 )
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -25,12 +25,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    
-    # Cloudinary storage must be before staticfiles
-    'cloudinary_storage',
     'django.contrib.staticfiles',
+
+    # Cloudinary (للميديا فقط — عشان كده بعد staticfiles)
+    'cloudinary_storage',
     'cloudinary',
-    
+
     'store',
 ]
 
@@ -115,8 +115,15 @@ USE_TZ = True
 # Static Files & Vercel Build Config
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
+
+# المجلد الذي يحتوي على ملفات الاستاتيك الخاصة بك
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# المجلد النهائي الذي سيتم تجميع كافة الملفات فيه عند تشغيل collectstatic
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ------------------------------------------------------------------
