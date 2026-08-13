@@ -1,8 +1,6 @@
 import os
-from io import BytesIO
-from PIL import Image
-from django.core.files.base import ContentFile
 from django.db import models
+from django_resized import ResizedImageField
 
 
 class CompanyInfo(models.Model):
@@ -33,7 +31,14 @@ class Service(models.Model):
     description = models.TextField()
     icon = models.CharField(max_length=100, help_text="Emoji fallback icon")
     image_url = models.URLField(max_length=500, blank=True, help_text="External image URL for the service card")
-    image = models.ImageField(upload_to='services/', blank=True, null=True, help_text="Local uploaded image (takes priority over URL)")
+    image = ResizedImageField(
+        force_format='WEBP', 
+        quality=80, 
+        upload_to='services/', 
+        blank=True, 
+        null=True, 
+        help_text="Uploaded image (Auto-converted to WEBP)"
+    )
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -44,36 +49,11 @@ class Service(models.Model):
 
     @property
     def display_image(self):
-        """Return local image URL, external URL, or None."""
         if self.image:
             return self.image.url
         if self.image_url:
             return self.image_url
         return None
-
-
-def convert_to_webp(image_field, quality=80):
-    """دالة مساعدة لضغط وتحويل أي صورة إلى صيغة WebP"""
-    if not image_field:
-        return
-
-    # فتح الصورة باستخدام Pillow
-    img = Image.open(image_field)
-    
-    # تحويل نمط الألوان إلى RGB إذا كانت RGBA لضمان التوافق مع WebP
-    if img.mode in ("RGBA", "P"):
-        img = img.convert("RGB")
-
-    output = BytesIO()
-    # حفظ الصورة بصيغة WEBP مع ضبط الجودة (افتراضياً 80%)
-    img.save(output, format='WEBP', quality=quality, optimize=True)
-    output.seek(0)
-
-    # تغيير امتداد الملف إلى .webp
-    filename = os.path.splitext(image_field.name)[0] + '.webp'
-    
-    # حفظ الملف الجديد في الحقل دون إعادة استدعاء save() لمنع Infinite Loop
-    image_field.save(filename, ContentFile(output.read()), save=False)
 
 
 class Project(models.Model):
@@ -85,7 +65,14 @@ class Project(models.Model):
     location = models.CharField(max_length=200, blank=True)
     is_featured = models.BooleanField(default=False)
     order = models.IntegerField(default=0)
-    cover_image = models.ImageField(upload_to='projects/covers/', blank=True, null=True, help_text="Main cover image for the project card")
+    cover_image = ResizedImageField(
+        force_format='WEBP', 
+        quality=80, 
+        upload_to='projects/covers/', 
+        blank=True, 
+        null=True, 
+        help_text="Main cover image (Auto-converted to WEBP)"
+    )
 
     class Meta:
         ordering = ['order']
@@ -93,15 +80,8 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        # تحويل غلاف المشروع (Cover) إلى WebP إذا تم رفعه/تعديله
-        if self.cover_image and not self.cover_image.name.endswith('.webp'):
-            convert_to_webp(self.cover_image)
-        super().save(*args, **kwargs)
-
     @property
     def first_image(self):
-        """Return cover_image or the first gallery image as fallback."""
         if self.cover_image:
             return self.cover_image
         img = self.images.first()
@@ -110,7 +90,11 @@ class Project(models.Model):
 
 class ProjectImage(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='projects/gallery/')
+    image = ResizedImageField(
+        force_format='WEBP', 
+        quality=80, 
+        upload_to='projects/gallery/'
+    )
     caption = models.CharField(max_length=300, blank=True)
     order = models.IntegerField(default=0)
 
@@ -119,12 +103,6 @@ class ProjectImage(models.Model):
 
     def __str__(self):
         return f"{self.project.title} — Image {self.order}"
-
-    def save(self, *args, **kwargs):
-        # تحويل صورة المعرض إلى WebP تلقائياً عند الحفظ
-        if self.image and not self.image.name.endswith('.webp'):
-            convert_to_webp(self.image)
-        super().save(*args, **kwargs)
 
 
 class Client(models.Model):
