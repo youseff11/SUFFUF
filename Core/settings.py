@@ -116,15 +116,14 @@ USE_TZ = True
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 
-# توجيه البحث لمجلد static سواء كان داخل Core أو في المجلد الرئيسي الخارجي
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
-    BASE_DIR.parent / 'static',
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
+# نحدد المجلد التجميعي
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# استخدام WhiteNoise لخدمة الملفات الثابتة
+# تفعيل WhiteNoise مع إيقاف الـ Manifest Strict لمنع الـ 404
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ------------------------------------------------------------------
