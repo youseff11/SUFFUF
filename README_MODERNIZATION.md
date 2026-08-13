@@ -29,3 +29,8 @@ python manage.py runserver
 ## ملاحظة حول الترجمة
 
 النصوص البنيوية والتحكمات أصبحت ثنائية اللغة. أما النصوص القادمة من قاعدة البيانات، مثل أسماء الخدمات ووصفها وأسماء المشروعات، فتظل كما هي لأن النموذج الحالي لا يحتوي حقول ترجمة مستقلة لها.
+
+
+postgresql://neondb_owner:npg_6xYVKUGNRbo4@ep-weathered-base-aylvwqpb-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+
+cQwgde3dXo_PdY9GP8UruArs6LU
