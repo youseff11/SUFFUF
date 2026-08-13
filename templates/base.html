@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111a21">
+    <title>{% block title %}SUFFUF{% endblock %} | Industrial Engineering</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'images/suffuf-mark.png' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body data-page="{{ request.resolver_match.url_name|default:'home' }}">
+<div class="site-shell">
+    <div class="announcement">
+        <span class="announcement-dot"></span>
+        <span data-en="Industrial engineering · Cairo, Egypt" data-ar="هندسة صناعية · القاهرة، مصر">Industrial engineering · Cairo, Egypt</span>
+        <span class="announcement-rule"></span>
+        <span class="announcement-secondary" data-en="Design to delivery" data-ar="من التصميم إلى التسليم">Design to delivery</span>
+    </div>
+
+    <header class="site-header">
+        <a class="brand-lockup" href="{% url 'store:home' %}" aria-label="Suffuf home">
+            <span class="brand-mark"><img src="{% static 'images/suffuf-mark.png' %}" alt=""></span>
+            <span class="brand-name">SUFFUF</span>
+        </a>
+        <nav class="main-nav" id="main-nav" data-menu aria-label="Primary navigation">
+            <a href="{% url 'store:about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}" data-en="About" data-ar="من نحن">About</a>
+            <a href="{% url 'store:services' %}" class="{% if 'service' in request.resolver_match.url_name %}active{% endif %}" data-en="Services" data-ar="الخدمات">Services</a>
+            <a href="{% url 'store:projects' %}" class="{% if request.resolver_match.url_name == 'projects' %}active{% endif %}" data-en="Projects" data-ar="المشروعات">Projects</a>
+            <a href="{% url 'store:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}" data-en="Contact" data-ar="تواصل معنا">Contact</a>
+        </nav>
+        <div class="header-actions">
+            <!-- زر تغيير اللغة شيك مع أيكونة الكرة الأرضية وسويتش للغة -->
+            <button class="utility-button lang-toggle-btn" type="button" data-language-toggle aria-label="Change language">
+                <svg class="utility-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <span data-lang-label class="lang-text">عربى</span>
+            </button>
+
+            <!-- زر الدارك واللايت مود بآيكونات القمر والشمس بتصميم معاصر -->
+            <button class="utility-button theme-toggle-btn" type="button" data-theme-toggle aria-label="Toggle dark/light mode">
+                <svg class="utility-icon icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="utility-icon icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+
+            <a class="header-cta" href="{% url 'store:contact' %}">
+                <span data-en="New project" data-ar="مشروع جديد">New project</span>
+                <span class="cta-arrow">↗</span>
+            </a>
+            <button class="menu-button" type="button" data-menu-toggle aria-label="Toggle menu" aria-expanded="false">☰</button>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="site-footer">
+        <a class="brand-lockup" href="{% url 'store:home' %}"><span class="brand-mark"><img src="{% static 'images/suffuf-mark.png' %}" alt=""></span><span class="brand-name">SUFFUF</span></a>
+        <p data-en="Engineering and construction for industry that cannot stand still." data-ar="هندسة وإنشاء للصناعة التي لا تتوقف.">Engineering and construction for industry that cannot stand still.</p>
+        <span>© 2026 SUFFUF</span>
+    </footer>
+</div>
+<script src="{% static 'js/site.js' %}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

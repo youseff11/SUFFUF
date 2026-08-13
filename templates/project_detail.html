@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<main class="project-detail-page">
+    <!-- Project Hero Header -->
+    <section class="project-hero-section">
+        <div class="hero-bg-wrap">
+            {% if project.first_image %}
+            <img src="{{ project.first_image.url }}" alt="{{ project.title }}">
+            {% else %}
+            <img src="{% static 'images/suffuf-project-fabrication.png' %}" alt="Project Header">
+            {% endif %}
+            <div class="hero-overlay-shade"></div>
+        </div>
+        
+        <div class="project-hero-content page-frame">
+            <a href="{% url 'store:projects' %}" class="back-link">← <span data-en="Back to all projects" data-ar="العودة لكافة المشروعات">Back to all projects</span></a>
+            <p class="eyebrow"><span class="eyebrow-line"></span><span>{{ project.service.title }}</span></p>
+            <h1>{{ project.title }}</h1>
+        </div>
+    </section>
+
+    <!-- Meta Details Bar -->
+    <section class="project-meta-bar">
+        <div class="meta-grid page-frame">
+            <div class="meta-item">
+                <span class="meta-label" data-en="Client" data-ar="العميل">Client</span>
+                <strong class="meta-value">{{ project.client_name }}</strong>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label" data-en="Location" data-ar="الموقع">Location</span>
+                <strong class="meta-value">{{ project.location|default:"Egypt" }}</strong>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label" data-en="Sector" data-ar="القطاع">Sector</span>
+                <strong class="meta-value">{{ project.service.title }}</strong>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label" data-en="Gallery" data-ar="المعرض">Gallery</span>
+                <strong class="meta-value">{{ project.images.count }} <span data-en="Photos" data-ar="صور">Photos</span></strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- Description & Context -->
+    <section class="section project-body-section">
+        <div class="page-content project-body-grid">
+            <div class="project-story">
+                <h2 data-en="Project Scope & Execution" data-ar="نطاق المشروع والتنفيذ">Project Scope & Execution</h2>
+                <div class="story-text">
+                    <p>{{ project.description|linebreaks }}</p>
+                    {% if project.description_ar %}
+                    <div class="ar-description-block">
+                        <p dir="rtl">{{ project.description_ar|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="project-sidebar">
+                <div class="sidebar-card">
+                    <h3 data-en="Engineering Standard" data-ar="معيار الهندسة">Engineering Standard</h3>
+                    <p data-en="Delivered with strict adherence to industrial reliability, safety protocols, and precision execution." data-ar="تم التنفيذ بالتزام صارم بمعايير الاعتمادية الصناعية، بروتوكولات السلامة، ودقة الإنجاز.">Delivered with strict adherence to industrial reliability, safety protocols, and precision execution.</p>
+                    <a href="{% url 'store:contact' %}" class="button button-copper">
+                        <span data-en="Inquire about similar builds" data-ar="استفسر عن مشروعات مشابهة">Inquire about similar builds</span> ↗
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Grid -->
+    {% if project.images.all %}
+    <section class="section project-gallery-section">
+        <div class="page-content">
+            <div class="section-intro">
+                <div>
+                    <p class="eyebrow eyebrow-dark"><span class="eyebrow-line"></span><span data-en="Visual Documentation" data-ar="التوثيق البصري">Visual Documentation</span></p>
+                    <h2 data-en="Site & Fabrication Gallery" data-ar="معرض صور الموقع والتصنيع">Site & Fabrication Gallery</h2>
+                </div>
+            </div>
+
+            <div class="gallery-editorial-grid">
+                {% for img in project.images.all %}
+                <div class="gallery-item" onclick="openLightbox({{ forloop.counter0 }})">
+                    <img src="{{ img.image.url }}" alt="{{ img.caption|default:project.title }}" loading="lazy">
+                    {% if img.caption %}
+                    <div class="item-caption">{{ img.caption }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Related Projects Navigation -->
+    {% if related_projects %}
+    <section class="section related-projects-section">
+        <div class="page-content">
+            <h2 class="related-title" data-en="Related Engineering Works" data-ar="مشروعات ذات صلة">Related Engineering Works</h2>
+            <div class="project-index-grid">
+                {% for rel in related_projects %}
+                <article class="project-index-card">
+                    <a href="{% url 'store:project_detail' rel.pk %}" class="project-card-link">
+                        <figure>
+                            {% if rel.first_image %}
+                            <img src="{{ rel.first_image.url }}" alt="{{ rel.title }}">
+                            {% endif %}
+                        </figure>
+                        <div class="project-index-body">
+                            <small>{{ rel.service.title }}</small>
+                            <h3>{{ rel.title }}</h3>
+                        </div>
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Lightbox Modal for Gallery Photos -->
+    <div class="lightbox-overlay" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <div class="lightbox-main" id="lightboxMain">
+            <button class="lightbox-nav prev" onclick="lightboxPrev()">‹</button>
+            <img id="lightboxImg" src="" alt="">
+            <button class="lightbox-nav next" onclick="lightboxNext()">›</button>
+        </div>
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+        <div class="lightbox-counter" id="lightboxCounter"></div>
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const galleryImages = [
+    {% for img in project.images.all %}
+    { src: "{{ img.image.url }}", caption: "{{ img.caption|escapejs }}" },
+    {% endfor %}
+];
+let currentIdx = 0;
+
+function openLightbox(idx) {
+    if (!galleryImages.length) return;
+    currentIdx = idx;
+    renderLightbox();
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function renderLightbox() {
+    const item = galleryImages[currentIdx];
+    document.getElementById('lightboxImg').src = item.src;
+    document.getElementById('lightboxCaption').textContent = item.caption || '';
+    document.getElementById('lightboxCounter').textContent = (currentIdx + 1) + ' / ' + galleryImages.length;
+}
+
+function lightboxPrev() {
+    currentIdx = (currentIdx - 1 + galleryImages.length) % galleryImages.length;
+    renderLightbox();
+}
+
+function lightboxNext() {
+    currentIdx = (currentIdx + 1) % galleryImages.length;
+    renderLightbox();
+}
+
+document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lightboxPrev();
+    if (e.key === 'ArrowRight') lightboxNext();
+});
+</script>
+{% endblock %}
