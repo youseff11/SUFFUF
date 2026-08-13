@@ -9,5 +9,4 @@ urlpatterns = [
 ]
 
 # تفعيل خدمة Static و Media بمرونة على البيئة السحابية (Vercel)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
