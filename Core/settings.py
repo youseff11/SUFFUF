@@ -115,8 +115,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
 
-# استخدام WhiteNoise لخدمة الملفات الثابتة بسرعة واستقرار
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# استخدام WhiteNoise المباشر للـ CSS/JS
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # ------------------------------------------------------------------
 # Media Files & Cloudinary Configurations
 # ------------------------------------------------------------------
