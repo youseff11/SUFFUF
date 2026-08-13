@@ -110,6 +110,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
 
+# إضافة هذا السطر لحل مشكلة collectstatic وتوافقية Cloudinary مع Django 5
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
 # ------------------------------------------------------------------
 # Media Files & Cloudinary Configurations
 # ------------------------------------------------------------------
