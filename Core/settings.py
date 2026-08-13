@@ -48,7 +48,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Core.urls'
 
 # ------------------------------------------------------------------
-# Templates Configuration (Fixed for Vercel Serverless Import Issue)
+# Templates Configuration
 # ------------------------------------------------------------------
 TEMPLATES = [
     {
@@ -116,14 +116,15 @@ USE_TZ = True
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 
+# البحث في المجلد الحالي والمجلد الأعلى لضمان العثور على static في جميع الحالات
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
+    BASE_DIR.parent / 'static',
 ]
 
-# نحدد المجلد التجميعي
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# تفعيل WhiteNoise مع إيقاف الـ Manifest Strict لمنع الـ 404
+# WhiteNoise لخدمة الملفات المجمعة على Vercel
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ------------------------------------------------------------------
