@@ -10,6 +10,25 @@ from .models import (
 @admin.register(CompanyInfo)
 class CompanyInfoAdmin(admin.ModelAdmin):
     list_display = ['name', 'founded_year']
+    fieldsets = (
+        ('Identity (English)', {
+            'fields': ('name', 'slogan', 'backstory', 'what_we_do'),
+        }),
+        ('Identity (Arabic) — الترجمة العربية', {
+            'fields': ('name_ar', 'slogan_ar', 'backstory_ar', 'what_we_do_ar'),
+            'classes': ('collapse',),
+        }),
+        ('Direction (English)', {
+            'fields': ('vision', 'mission', 'safety_statement', 'quality_policy'),
+        }),
+        ('Direction (Arabic) — الترجمة العربية', {
+            'fields': ('vision_ar', 'mission_ar', 'safety_statement_ar', 'quality_policy_ar'),
+            'classes': ('collapse',),
+        }),
+        ('Contact & Meta', {
+            'fields': ('founded_year', 'years_experience', 'email', 'phone', 'address', 'address_ar'),
+        }),
+    )
 
 
 @admin.register(Service)
@@ -18,7 +37,7 @@ class ServiceAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     fieldsets = (
         (None, {
-            'fields': ('title', 'slug', 'description', 'icon', 'order')
+            'fields': ('title', 'title_ar', 'slug', 'description', 'description_ar', 'icon', 'order')
         }),
         ('Service Image', {
             'fields': ('image', 'image_url', 'image_preview_large'),
@@ -53,7 +72,7 @@ class ServiceAdmin(admin.ModelAdmin):
 class ProjectImageInline(admin.TabularInline):
     model = ProjectImage
     extra = 1
-    fields = ['image', 'thumbnail_preview', 'caption', 'order']
+    fields = ['image', 'thumbnail_preview', 'caption', 'caption_ar', 'order']
     readonly_fields = ['thumbnail_preview']
     ordering = ['order']
 
@@ -103,12 +122,15 @@ class ProjectAdmin(admin.ModelAdmin):
     form = ProjectAdminForm
     list_display = ['title', 'client_name', 'service', 'is_featured', 'cover_preview', 'image_count']
     list_filter = ['service', 'is_featured', 'client_name']
-    search_fields = ['title', 'client_name', 'description', 'description_ar']
+    search_fields = ['title', 'title_ar', 'client_name', 'description', 'description_ar']
     list_editable = ['is_featured']
     inlines = [ProjectImageInline]
     fieldsets = (
-        (None, {
-            'fields': ('title', 'client_name', 'service', 'description', 'description_ar', 'location')
+        ('Content (English)', {
+            'fields': ('title', 'client_name', 'service', 'description', 'location')
+        }),
+        ('Content (Arabic) — الترجمة العربية', {
+            'fields': ('title_ar', 'description_ar', 'location_ar'),
         }),
         ('Display', {
             'fields': ('cover_image', 'cover_image_preview', 'is_featured', 'order'),
@@ -172,7 +194,8 @@ class ProjectAdmin(admin.ModelAdmin):
 class ProjectImageAdmin(admin.ModelAdmin):
     list_display = ['project', 'thumbnail_preview', 'caption', 'order']
     list_filter = ['project__service', 'project']
-    search_fields = ['project__title', 'caption']
+    search_fields = ['project__title', 'caption', 'caption_ar']
+    fields = ['project', 'image', 'caption', 'caption_ar', 'order']
 
     def thumbnail_preview(self, obj):
         if obj.image:
@@ -188,18 +211,22 @@ class ProjectImageAdmin(admin.ModelAdmin):
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     list_display = ['name', 'industry']
+    fields = ['name', 'industry', 'industry_ar', 'order']
 
 
 @admin.register(Stat)
 class StatAdmin(admin.ModelAdmin):
     list_display = ['label', 'value']
+    fields = ['label', 'label_ar', 'value', 'icon', 'order']
 
 
 @admin.register(SafetyPoint)
 class SafetyPointAdmin(admin.ModelAdmin):
     list_display = ['text', 'order']
+    fields = ['text', 'text_ar', 'order']
 
 
 @admin.register(SuffufMeaning)
 class SuffufMeaningAdmin(admin.ModelAdmin):
     list_display = ['letter', 'word', 'order']
+    fields = ['letter', 'word', 'word_ar', 'order']

@@ -2,8 +2,27 @@
 {% block title %}{{ service.title }}{% endblock %}
 {% block content %}
 <main>
-    <section class="page-hero"><div class="page-frame"><p class="eyebrow"><span class="eyebrow-line"></span><a href="{% url 'store:services' %}" data-en="Services" data-ar="الخدمات">Services</a><span>/</span></p><h1>{{ service.title }}</h1><p>{{ service.description }}</p></div></section>
-    <section class="section"><div class="page-content"><div class="section-intro"><div><p class="eyebrow eyebrow-dark"><span class="eyebrow-line"></span><span data-en="Portfolio" data-ar="المشروعات">Portfolio</span></p><h2 data-en="Projects in this discipline." data-ar="مشروعات ضمن هذا التخصص.">Projects in this discipline.</h2></div><p class="section-lead">{{ projects.count }} <span data-en="completed project" data-ar="مشروع مكتمل">completed project</span>{{ projects.count|pluralize }}.</p></div><div class="detail-projects">{% for proj in projects %}<article class="editorial-card reveal">{% with imgs=proj.images.all imgs_count=proj.images.count %}{% if imgs_count > 0 %}<div class="dp-gallery {% if imgs_count == 1 %}g1{% elif imgs_count == 2 %}g2{% elif imgs_count == 3 %}g3{% else %}g4plus{% endif %}">{% for img in imgs|slice:":4" %}<div class="gimg" onclick="openLightbox({{ proj.id }}, {{ forloop.counter0 }})"><img src="{{ img.image.url }}" alt="{{ img.caption|default:proj.title }}" loading="lazy">{% if forloop.counter == 4 and imgs_count > 4 %}<div class="gimg-more">+{{ imgs_count|add:"-4" }}</div>{% endif %}</div>{% endfor %}</div>{% endif %}{% endwith %}<div class="dp-body"><span class="feature-number">{{ proj.client_name }}{% if proj.location %} · {{ proj.location }}{% endif %}</span><h3>{{ proj.title }}</h3><p>{{ proj.description }}</p></div></article>{% empty %}<div class="editorial-card"><p data-en="No projects listed yet for this service." data-ar="لا توجد مشروعات منشورة لهذه الخدمة بعد.">No projects listed yet for this service.</p></div>{% endfor %}</div></div></section>
+    <section class="page-hero"><div class="page-frame"><p class="eyebrow"><span class="eyebrow-line"></span><a href="{% url 'store:services' %}" data-en="Services" data-ar="الخدمات">Services</a><span>/</span></p><h1 data-en="{{ service.title }}" data-ar="{{ service.title_ar|default:service.title }}">{{ service.title }}</h1>
+    {% if service.description_ar %}
+    <p class="tr-en">{{ service.description }}</p>
+    <p class="tr-ar">{{ service.description_ar }}</p>
+    {% else %}
+    <p>{{ service.description }}</p>
+    {% endif %}
+    </div></section>
+
+    <section class="section"><div class="page-content"><div class="section-intro"><div><p class="eyebrow eyebrow-dark"><span class="eyebrow-line"></span><span data-en="Portfolio" data-ar="المشروعات">Portfolio</span></p><h2 data-en="Projects in this discipline." data-ar="مشروعات ضمن هذا التخصص.">Projects in this discipline.</h2></div><p class="section-lead">{{ projects.count }} <span data-en="completed project" data-ar="مشروع مكتمل">completed project</span>{{ projects.count|pluralize }}.</p></div>
+    <div class="detail-projects">{% for proj in projects %}<article class="editorial-card reveal">{% with imgs=proj.images.all imgs_count=proj.images.count %}{% if imgs_count > 0 %}<div class="dp-gallery {% if imgs_count == 1 %}g1{% elif imgs_count == 2 %}g2{% elif imgs_count == 3 %}g3{% else %}g4plus{% endif %}">{% for img in imgs|slice:":4" %}<div class="gimg" onclick="openLightbox({{ proj.id }}, {{ forloop.counter0 }})"><img src="{{ img.image.url }}" alt="{{ img.caption|default:proj.title }}" loading="lazy">{% if forloop.counter == 4 and imgs_count > 4 %}<div class="gimg-more">+{{ imgs_count|add:"-4" }}</div>{% endif %}</div>{% endfor %}</div>{% endif %}{% endwith %}
+    <div class="dp-body"><span class="feature-number">{{ proj.client_name }}{% if proj.location %} · <span data-en="{{ proj.location }}" data-ar="{{ proj.location_ar|default:proj.location }}">{{ proj.location }}</span>{% endif %}</span>
+    <h3 data-en="{{ proj.title }}" data-ar="{{ proj.title_ar|default:proj.title }}">{{ proj.title }}</h3>
+    {% if proj.description_ar %}
+    <p class="tr-en">{{ proj.description }}</p>
+    <p class="tr-ar">{{ proj.description_ar }}</p>
+    {% else %}
+    <p>{{ proj.description }}</p>
+    {% endif %}
+    </div></article>{% empty %}<div class="editorial-card"><p data-en="No projects listed yet for this service." data-ar="لا توجد مشروعات منشورة لهذه الخدمة بعد.">No projects listed yet for this service.</p></div>{% endfor %}</div></div></section>
+
     <div class="lightbox-overlay" id="lightbox"><button class="lightbox-close" onclick="closeLightbox()">×</button><div class="lightbox-main"><button class="lightbox-nav prev" onclick="lightboxPrev()">‹</button><img id="lightboxImg" src="" alt=""><button class="lightbox-nav next" onclick="lightboxNext()">›</button></div><div class="lightbox-caption" id="lightboxCaption"></div><div class="lightbox-counter" id="lightboxCounter"></div><div class="lightbox-thumbs" id="lightboxThumbs"></div></div>
 </main>
 {% endblock %}

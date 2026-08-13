@@ -16,7 +16,7 @@
             <div class="filter-row reveal">
                 <a href="{% url 'store:projects' %}" class="filter-chip {% if not current_filter %}active{% endif %}" data-en="All projects" data-ar="كل المشروعات">All projects</a>
                 {% for svc in services %}
-                <a href="{% url 'store:projects' %}?service={{ svc.slug }}" class="filter-chip {% if current_filter == svc.slug %}active{% endif %}">{{ svc.title }}</a>
+                <a href="{% url 'store:projects' %}?service={{ svc.slug }}" class="filter-chip {% if current_filter == svc.slug %}active{% endif %}" data-en="{{ svc.title }}" data-ar="{{ svc.title_ar|default:svc.title }}">{{ svc.title }}</a>
                 {% endfor %}
             </div>
 
@@ -35,10 +35,15 @@
                             {% endif %}
                         </figure>
                         <div class="project-index-body">
-                            <small>{{ proj.service.title }}</small>
-                            <h3>{{ proj.title }}</h3>
-                            <p class="proj-meta">{{ proj.client_name }}{% if proj.location %} · {{ proj.location }}{% endif %}</p>
+                            <small data-en="{{ proj.service.title }}" data-ar="{{ proj.service.title_ar|default:proj.service.title }}">{{ proj.service.title }}</small>
+                            <h3 data-en="{{ proj.title }}" data-ar="{{ proj.title_ar|default:proj.title }}">{{ proj.title }}</h3>
+                            <p class="proj-meta">{{ proj.client_name }}{% if proj.location %} · <span data-en="{{ proj.location }}" data-ar="{{ proj.location_ar|default:proj.location }}">{{ proj.location }}</span>{% endif %}</p>
+                            {% if proj.description_ar %}
+                            <p class="proj-desc tr-en">{{ proj.description|truncatewords:24 }}</p>
+                            <p class="proj-desc tr-ar">{{ proj.description_ar|truncatewords:24 }}</p>
+                            {% else %}
                             <p class="proj-desc">{{ proj.description|truncatewords:24 }}</p>
+                            {% endif %}
                             <span class="read-more-btn"><span data-en="View Project" data-ar="عرض التفاصيل">View Project</span> ↗</span>
                         </div>
                     </a>

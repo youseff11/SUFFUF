@@ -5,18 +5,27 @@ from django_resized import ResizedImageField
 
 class CompanyInfo(models.Model):
     name = models.CharField(max_length=200)
+    name_ar = models.CharField(max_length=200, blank=True)
     slogan = models.CharField(max_length=300)
+    slogan_ar = models.CharField(max_length=300, blank=True)
     backstory = models.TextField()
+    backstory_ar = models.TextField(blank=True)
     what_we_do = models.TextField()
+    what_we_do_ar = models.TextField(blank=True)
     vision = models.TextField()
+    vision_ar = models.TextField(blank=True)
     mission = models.TextField()
+    mission_ar = models.TextField(blank=True)
     safety_statement = models.TextField()
+    safety_statement_ar = models.TextField(blank=True)
     quality_policy = models.TextField()
+    quality_policy_ar = models.TextField(blank=True)
     founded_year = models.IntegerField(default=2017)
     years_experience = models.IntegerField(default=6)
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=50, blank=True)
     address = models.TextField(blank=True)
+    address_ar = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = "Company Info"
@@ -27,16 +36,18 @@ class CompanyInfo(models.Model):
 
 class Service(models.Model):
     title = models.CharField(max_length=200)
+    title_ar = models.CharField(max_length=200, blank=True)
     slug = models.SlugField(unique=True)
     description = models.TextField()
+    description_ar = models.TextField(blank=True)
     icon = models.CharField(max_length=100, help_text="Emoji fallback icon")
     image_url = models.URLField(max_length=500, blank=True, help_text="External image URL for the service card")
     image = ResizedImageField(
-        force_format='WEBP', 
-        quality=80, 
-        upload_to='services/', 
-        blank=True, 
-        null=True, 
+        force_format='WEBP',
+        quality=80,
+        upload_to='services/',
+        blank=True,
+        null=True,
         help_text="Uploaded image (Auto-converted to WEBP)"
     )
     order = models.IntegerField(default=0)
@@ -58,19 +69,21 @@ class Service(models.Model):
 
 class Project(models.Model):
     title = models.CharField(max_length=300)
+    title_ar = models.CharField(max_length=300, blank=True)
     client_name = models.CharField(max_length=200)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='projects')
     description = models.TextField()
     description_ar = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=200, blank=True)
+    location_ar = models.CharField(max_length=200, blank=True)
     is_featured = models.BooleanField(default=False)
     order = models.IntegerField(default=0)
     cover_image = ResizedImageField(
-        force_format='WEBP', 
-        quality=80, 
-        upload_to='projects/covers/', 
-        blank=True, 
-        null=True, 
+        force_format='WEBP',
+        quality=80,
+        upload_to='projects/covers/',
+        blank=True,
+        null=True,
         help_text="Main cover image (Auto-converted to WEBP)"
     )
 
@@ -91,11 +104,12 @@ class Project(models.Model):
 class ProjectImage(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='images')
     image = ResizedImageField(
-        force_format='WEBP', 
-        quality=80, 
+        force_format='WEBP',
+        quality=80,
         upload_to='projects/gallery/'
     )
     caption = models.CharField(max_length=300, blank=True)
+    caption_ar = models.CharField(max_length=300, blank=True)
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -108,6 +122,7 @@ class ProjectImage(models.Model):
 class Client(models.Model):
     name = models.CharField(max_length=200)
     industry = models.CharField(max_length=200)
+    industry_ar = models.CharField(max_length=200, blank=True)
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -119,6 +134,7 @@ class Client(models.Model):
 
 class Stat(models.Model):
     label = models.CharField(max_length=100)
+    label_ar = models.CharField(max_length=100, blank=True)
     value = models.CharField(max_length=50)
     icon = models.CharField(max_length=100, blank=True)
     order = models.IntegerField(default=0)
@@ -132,6 +148,7 @@ class Stat(models.Model):
 
 class SafetyPoint(models.Model):
     text = models.TextField()
+    text_ar = models.TextField(blank=True)
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -144,6 +161,7 @@ class SafetyPoint(models.Model):
 class SuffufMeaning(models.Model):
     letter = models.CharField(max_length=1)
     word = models.CharField(max_length=50)
+    word_ar = models.CharField(max_length=50, blank=True)
     order = models.IntegerField(default=0)
 
     class Meta:

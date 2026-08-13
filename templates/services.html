@@ -4,6 +4,21 @@
 {% block content %}
 <main>
     <section class="page-hero"><div class="page-frame"><p class="eyebrow"><span class="eyebrow-line"></span><span data-en="What we make possible" data-ar="ما ننجزه">What we make possible</span></p><h1 data-en="Capabilities that move from drawing to delivery." data-ar="قدرات تنتقل من الرسم إلى التسليم.">Capabilities that move from drawing to delivery.</h1><p data-en="Industrial engineering and construction solutions with a clear next step." data-ar="حلول هندسية وإنشائية صناعية بخطوة تالية واضحة.">Industrial engineering and construction solutions with a clear next step.</p></div></section>
-    <section class="section"><div class="page-content"><div class="section-intro"><div><p class="eyebrow eyebrow-dark"><span class="eyebrow-line"></span><span data-en="Our scope" data-ar="نطاق عملنا">Our scope</span></p><h2 data-en="One team across the critical path." data-ar="فريق واحد عبر المسار الحرج.">One team across the critical path.</h2></div><p class="section-lead">{{ company.what_we_do }}</p></div>{% for svc in services %}<a class="service-feature reveal" href="{% url 'store:service_detail' svc.slug %}"><div class="feature-image">{% if svc.display_image %}<img src="{{ svc.display_image }}" alt="{{ svc.title }}" loading="lazy">{% elif forloop.first %}<img src="{% static 'images/suffuf-project-fabrication.png' %}" alt="Steel fabrication workshop">{% else %}<img src="{% static 'images/suffuf-project-piping.png' %}" alt="Industrial piping network">{% endif %}</div><div class="feature-copy"><span class="feature-number">{{ forloop.counter|stringformat:"02d" }} / 0{{ services|length }}</span><h2>{{ svc.title }}</h2><p>{{ svc.description }}</p><span class="feature-meta">{{ svc.projects.count }} <span data-en="projects · View service" data-ar="مشروعات · عرض الخدمة">projects · View service</span> ↗</span></div></a>{% empty %}<div class="editorial-card"><p data-en="Our service catalogue is being prepared." data-ar="يجري تجهيز قائمة خدماتنا.">Our service catalogue is being prepared.</p></div>{% endfor %}</div></section>
+    <section class="section"><div class="page-content"><div class="section-intro"><div><p class="eyebrow eyebrow-dark"><span class="eyebrow-line"></span><span data-en="Our scope" data-ar="نطاق عملنا">Our scope</span></p><h2 data-en="One team across the critical path." data-ar="فريق واحد عبر المسار الحرج.">One team across the critical path.</h2></div>
+    {% if company.what_we_do_ar %}
+    <p class="section-lead tr-en">{{ company.what_we_do }}</p>
+    <p class="section-lead tr-ar">{{ company.what_we_do_ar }}</p>
+    {% else %}
+    <p class="section-lead">{{ company.what_we_do }}</p>
+    {% endif %}
+    </div>
+    {% for svc in services %}<a class="service-feature reveal" href="{% url 'store:service_detail' svc.slug %}"><div class="feature-image">{% if svc.display_image %}<img src="{{ svc.display_image }}" alt="{{ svc.title }}" loading="lazy">{% elif forloop.first %}<img src="{% static 'images/suffuf-project-fabrication.png' %}" alt="Steel fabrication workshop">{% else %}<img src="{% static 'images/suffuf-project-piping.png' %}" alt="Industrial piping network">{% endif %}</div><div class="feature-copy"><span class="feature-number">{{ forloop.counter|stringformat:"02d" }} / 0{{ services|length }}</span><h2 data-en="{{ svc.title }}" data-ar="{{ svc.title_ar|default:svc.title }}">{{ svc.title }}</h2>
+    {% if svc.description_ar %}
+    <p class="tr-en">{{ svc.description }}</p>
+    <p class="tr-ar">{{ svc.description_ar }}</p>
+    {% else %}
+    <p>{{ svc.description }}</p>
+    {% endif %}
+    <span class="feature-meta">{{ svc.projects.count }} <span data-en="projects · View service" data-ar="مشروعات · عرض الخدمة">projects · View service</span> ↗</span></div></a>{% empty %}<div class="editorial-card"><p data-en="Our service catalogue is being prepared." data-ar="يجري تجهيز قائمة خدماتنا.">Our service catalogue is being prepared.</p></div>{% endfor %}</div></section>
 </main>
 {% endblock %}

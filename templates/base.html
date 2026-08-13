@@ -11,6 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{% static 'images/suffuf-mark.png' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <style>
+        /* Bilingual content blocks (long text with HTML) */
+        html[lang="ar"] .tr-en { display: none !important; }
+        html[lang="en"] .tr-ar { display: none !important; }
+        .tr-ar { direction: rtl; text-align: right; }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body data-page="{{ request.resolver_match.url_name|default:'home' }}">
@@ -34,7 +40,6 @@
             <a href="{% url 'store:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}" data-en="Contact" data-ar="تواصل معنا">Contact</a>
         </nav>
         <div class="header-actions">
-            <!-- زر تغيير اللغة شيك مع أيكونة الكرة الأرضية وسويتش للغة -->
             <button class="utility-button lang-toggle-btn" type="button" data-language-toggle aria-label="Change language">
                 <svg class="utility-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -44,7 +49,6 @@
                 <span data-lang-label class="lang-text">عربى</span>
             </button>
 
-            <!-- زر الدارك واللايت مود بآيكونات القمر والشمس بتصميم معاصر -->
             <button class="utility-button theme-toggle-btn" type="button" data-theme-toggle aria-label="Toggle dark/light mode">
                 <svg class="utility-icon icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="5"></circle>

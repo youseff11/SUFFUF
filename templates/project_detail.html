@@ -4,7 +4,6 @@
 
 {% block content %}
 <main class="project-detail-page">
-    <!-- Project Hero Header -->
     <section class="project-hero-section">
         <div class="hero-bg-wrap">
             {% if project.first_image %}
@@ -14,15 +13,14 @@
             {% endif %}
             <div class="hero-overlay-shade"></div>
         </div>
-        
+
         <div class="project-hero-content page-frame">
             <a href="{% url 'store:projects' %}" class="back-link">← <span data-en="Back to all projects" data-ar="العودة لكافة المشروعات">Back to all projects</span></a>
-            <p class="eyebrow"><span class="eyebrow-line"></span><span>{{ project.service.title }}</span></p>
-            <h1>{{ project.title }}</h1>
+            <p class="eyebrow"><span class="eyebrow-line"></span><span data-en="{{ project.service.title }}" data-ar="{{ project.service.title_ar|default:project.service.title }}">{{ project.service.title }}</span></p>
+            <h1 data-en="{{ project.title }}" data-ar="{{ project.title_ar|default:project.title }}">{{ project.title }}</h1>
         </div>
     </section>
 
-    <!-- Meta Details Bar -->
     <section class="project-meta-bar">
         <div class="meta-grid page-frame">
             <div class="meta-item">
@@ -31,11 +29,11 @@
             </div>
             <div class="meta-item">
                 <span class="meta-label" data-en="Location" data-ar="الموقع">Location</span>
-                <strong class="meta-value">{{ project.location|default:"Egypt" }}</strong>
+                <strong class="meta-value" data-en="{{ project.location|default:'Egypt' }}" data-ar="{{ project.location_ar|default:project.location|default:'مصر' }}">{{ project.location|default:"Egypt" }}</strong>
             </div>
             <div class="meta-item">
                 <span class="meta-label" data-en="Sector" data-ar="القطاع">Sector</span>
-                <strong class="meta-value">{{ project.service.title }}</strong>
+                <strong class="meta-value" data-en="{{ project.service.title }}" data-ar="{{ project.service.title_ar|default:project.service.title }}">{{ project.service.title }}</strong>
             </div>
             <div class="meta-item">
                 <span class="meta-label" data-en="Gallery" data-ar="المعرض">Gallery</span>
@@ -44,21 +42,20 @@
         </div>
     </section>
 
-    <!-- Description & Context -->
     <section class="section project-body-section">
         <div class="page-content project-body-grid">
             <div class="project-story">
                 <h2 data-en="Project Scope & Execution" data-ar="نطاق المشروع والتنفيذ">Project Scope & Execution</h2>
                 <div class="story-text">
-                    <p>{{ project.description|linebreaks }}</p>
                     {% if project.description_ar %}
-                    <div class="ar-description-block">
-                        <p dir="rtl">{{ project.description_ar|linebreaks }}</p>
-                    </div>
+                    <div class="tr-en">{{ project.description|linebreaks }}</div>
+                    <div class="tr-ar">{{ project.description_ar|linebreaks }}</div>
+                    {% else %}
+                    {{ project.description|linebreaks }}
                     {% endif %}
                 </div>
             </div>
-            
+
             <div class="project-sidebar">
                 <div class="sidebar-card">
                     <h3 data-en="Engineering Standard" data-ar="معيار الهندسة">Engineering Standard</h3>
@@ -71,7 +68,6 @@
         </div>
     </section>
 
-    <!-- Photo Gallery Grid -->
     {% if project.images.all %}
     <section class="section project-gallery-section">
         <div class="page-content">
@@ -86,8 +82,8 @@
                 {% for img in project.images.all %}
                 <div class="gallery-item" onclick="openLightbox({{ forloop.counter0 }})">
                     <img src="{{ img.image.url }}" alt="{{ img.caption|default:project.title }}" loading="lazy">
-                    {% if img.caption %}
-                    <div class="item-caption">{{ img.caption }}</div>
+                    {% if img.caption or img.caption_ar %}
+                    <div class="item-caption" data-en="{{ img.caption }}" data-ar="{{ img.caption_ar|default:img.caption }}">{{ img.caption }}</div>
                     {% endif %}
                 </div>
                 {% endfor %}
@@ -96,7 +92,6 @@
     </section>
     {% endif %}
 
-    <!-- Related Projects Navigation -->
     {% if related_projects %}
     <section class="section related-projects-section">
         <div class="page-content">
@@ -111,8 +106,8 @@
                             {% endif %}
                         </figure>
                         <div class="project-index-body">
-                            <small>{{ rel.service.title }}</small>
-                            <h3>{{ rel.title }}</h3>
+                            <small data-en="{{ rel.service.title }}" data-ar="{{ rel.service.title_ar|default:rel.service.title }}">{{ rel.service.title }}</small>
+                            <h3 data-en="{{ rel.title }}" data-ar="{{ rel.title_ar|default:rel.title }}">{{ rel.title }}</h3>
                         </div>
                     </a>
                 </article>
@@ -122,7 +117,6 @@
     </section>
     {% endif %}
 
-    <!-- Lightbox Modal for Gallery Photos -->
     <div class="lightbox-overlay" id="lightbox">
         <button class="lightbox-close" onclick="closeLightbox()">×</button>
         <div class="lightbox-main" id="lightboxMain">
@@ -140,7 +134,7 @@
 <script>
 const galleryImages = [
     {% for img in project.images.all %}
-    { src: "{{ img.image.url }}", caption: "{{ img.caption|escapejs }}" },
+    { src: "{{ img.image.url }}", caption: "{{ img.caption|escapejs }}", caption_ar: "{{ img.caption_ar|escapejs }}" },
     {% endfor %}
 ];
 let currentIdx = 0;
@@ -160,8 +154,9 @@ function closeLightbox() {
 
 function renderLightbox() {
     const item = galleryImages[currentIdx];
+    const isAr = document.documentElement.lang === 'ar';
     document.getElementById('lightboxImg').src = item.src;
-    document.getElementById('lightboxCaption').textContent = item.caption || '';
+    document.getElementById('lightboxCaption').textContent = (isAr && item.caption_ar) ? item.caption_ar : (item.caption || '');
     document.getElementById('lightboxCounter').textContent = (currentIdx + 1) + ' / ' + galleryImages.length;
 }
 
