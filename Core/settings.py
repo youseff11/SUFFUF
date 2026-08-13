@@ -116,14 +116,12 @@ USE_TZ = True
 # ------------------------------------------------------------------
 STATIC_URL = '/static/'
 
-# توجيه المجلد المباشر الموجود داخل Core
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
 
-# WhiteNoise لخدمة الملفات الثابتة
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # ------------------------------------------------------------------
